@@ -23,6 +23,9 @@ class UserRequestInput(TypedDict, total=False):
 
 @final
 class ClientRequestParam(pydantic.BaseModel):
+    class Config:
+        arbitrary_types_allowed = True
+
     method: str
     url: str
     max_retries: Union[int, NotGiven] = NotGiven()
@@ -47,7 +50,6 @@ class ClientRequestParam(pydantic.BaseModel):
         kwargs: dict[str, Any] = {
             key: remove_notgiven_indict(value) for key, value in values.items()
         }
-        return cast(ClientRequestParam, super().model_construct(_fields_set, **kwargs))
+        return cast(ClientRequestParam, super().construct(_fields_set, **kwargs))
 
-    model_construct = construct
 
